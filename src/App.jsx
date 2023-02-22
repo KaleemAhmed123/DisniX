@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { fetchData } from "./utils/api";
-react;
 function App() {
   useEffect(() => {
     apitesting();
