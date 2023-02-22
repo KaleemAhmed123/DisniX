@@ -23,8 +23,6 @@ function App() {
   // config /endpoints have what we need like poster and all...
   const apiConfigEP = () => {
     fetchData("/configuration").then((res) => {
-      console.log(res);
-
       const url = {
         backdrop: res.images.secure_base_url + "original",
         poster: res.images.secure_base_url + "original",
@@ -37,7 +35,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* <Header /> */}
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/:mediaType/:id" element={<Details />} />

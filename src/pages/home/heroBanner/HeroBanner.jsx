@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/usefetch";
 import "./style.scss";
+
+import Img from "../../../components/lazyLoadImg/Img";
+import ContentWrapper from "../../../components/contentWrapper/ContentWrapper";
 
 const HeroBanner = () => {
   const [background, setBackground] = useState("");
@@ -15,8 +18,8 @@ const HeroBanner = () => {
   // for random banner
   useEffect(() => {
     const bgUrl =
-      url.backdrop +
-      data?.result[Math.floor(Math.random() * 20)]?.backdrop_path;
+      url?.backdrop +
+      data?.results[Math.floor(Math.random() * 20)]?.backdrop_path;
     setBackground(bgUrl);
   }, [data]);
 
@@ -29,7 +32,15 @@ const HeroBanner = () => {
 
   return (
     <div className="heroBanner">
-      <div className="wrappeer">
+      {!loading && (
+        <div className="backdrop-img">
+          <Img src={background} />
+        </div>
+      )}
+
+      <div className="opacity-layer"></div>
+
+      <ContentWrapper>
         <div className="heroBannerContent">
           <span className="title">Welcome.</span>
           <span className="subTitle">
@@ -43,9 +54,10 @@ const HeroBanner = () => {
               onKeyUp={() => searchQueryHandle}
               onChange={(e) => setQuery(e.target.value)}
             />
+            <button>Search</button>
           </div>
         </div>
-      </div>
+      </ContentWrapper>
     </div>
   );
 };
