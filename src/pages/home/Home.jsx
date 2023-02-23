@@ -8,8 +8,8 @@ const Home = () => {
   return (
     <>
       <div style={{ height: 1000 }}>
-        <Trending />
         <HeroBanner />
+        <Trending />
       </div>
     </>
   );
