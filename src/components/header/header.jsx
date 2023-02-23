@@ -10,16 +10,40 @@ import ContentWrapper from "../contentWrapper/ContentWrapper";
 import logo from "../../assets/movix-logo.svg";
 
 const Header = () => {
-  const [show, setShow] = useState("top"); // for scroll effect
-  const [lastScrollY, setLastScrollY] = useState(0); // up down scroll effect
-  const [mobileMenu, setMobileMenu] = useState(false); // ham menu
-  const [query, setQuery] = useState(""); // text inp
-  const [showSearch, setShowSearch] = useState(""); // for result of search
+  const [show, setShow] = useState("top");
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const [query, setQuery] = useState("");
+  const [showSearch, setShowSearch] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  // next page pe scrool top par
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
-  const searchQueryHandle = (e) => {
-    if (e.key === "Enter" && query.length > 0) {
+  const controlNavbar = () => {
+    if (window.scrollY > 200) {
+      if (window.scrollY > lastScrollY && !mobileMenu) {
+        setShow("hide"); // hide after certain scroll
+      } else {
+        setShow("show"); // means again going up
+      }
+    } else {
+      setShow("top"); // black one
+    }
+    setLastScrollY(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", controlNavbar);
+    return () => {
+      window.removeEventListener("scroll", controlNavbar);
+    };
+  }, [lastScrollY]);
+
+  const searchQueryHandler = (event) => {
+    if (event.key === "Enter" && query.length > 0) {
       navigate(`/search/${query}`);
       setTimeout(() => {
         setShowSearch(false);
@@ -31,12 +55,13 @@ const Header = () => {
     setMobileMenu(false);
     setShowSearch(true);
   };
+
   const openMobileMenu = () => {
     setMobileMenu(true);
     setShowSearch(false);
   };
 
-  const navigationHandleer = (type) => {
+  const navigationHandler = (type) => {
     if (type === "movie") {
       navigate("/explore/movie");
     } else {
@@ -44,27 +69,18 @@ const Header = () => {
     }
     setMobileMenu(false);
   };
+
   return (
-    <header className={`header ${mobileMenu ? "mobileView" : ""} ${show} `}>
+    <header className={`header ${mobileMenu ? "mobileView" : ""} ${show}`}>
       <ContentWrapper>
-        <div className="logo">
-          <img src={logo} alt="logo" />
+        <div className="logo" onClick={() => navigate("/")}>
+          <img src={logo} alt="" />
         </div>
         <ul className="menuItems">
-          <li
-            className="menuItem"
-            onClick={() => {
-              navigationHandleer("movie");
-            }}
-          >
+          <li className="menuItem" onClick={() => navigationHandler("movie")}>
             Movies
           </li>
-          <li
-            className="menuItem"
-            onClick={() => {
-              navigationHandleer("tv");
-            }}
-          >
+          <li className="menuItem" onClick={() => navigationHandler("tv")}>
             TV Shows
           </li>
           <li className="menuItem">
@@ -72,7 +88,7 @@ const Header = () => {
           </li>
         </ul>
 
-        <div className="mobileMenuIcons">
+        <div className="mobileMenuItems">
           <HiOutlineSearch onClick={openSearch} />
           {mobileMenu ? (
             <VscChromeClose onClick={() => setMobileMenu(false)} />
@@ -81,16 +97,15 @@ const Header = () => {
           )}
         </div>
       </ContentWrapper>
-
       {showSearch && (
         <div className="searchBar">
           <ContentWrapper>
             <div className="searchInput">
               <input
                 type="text"
-                placeholder="Search for a movie or TV show....."
-                onKeyUp={() => searchQueryHandle}
+                placeholder="Search for a movie or tv show...."
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyUp={searchQueryHandler}
               />
               <VscChromeClose onClick={() => setShowSearch(false)} />
             </div>
@@ -102,5 +117,3 @@ const Header = () => {
 };
 
 export default Header;
-
-// CSS
