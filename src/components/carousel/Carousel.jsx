@@ -14,7 +14,7 @@ import CircleRating from "../circleRating/CircleRating";
 import Genres from "../genres/Genres";
 
 import "./style.scss";
-
+// endpoint becz tv shows doesnt has bg property so endpoint/item.id
 const Carousel = ({ data, loading, endpoint, title }) => {
   const carouselContainer = useRef();
   const { url } = useSelector((state) => state.home);

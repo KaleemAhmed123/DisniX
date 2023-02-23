@@ -56,9 +56,9 @@
         margin: 0 auto;
 
         .title {
-            font-size: 45px;
+            font-size: 46px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
 
             @include md {
                 margin-bottom: 0;
@@ -67,9 +67,9 @@
         }
 
         .subTitle {
-            font-size: 15px;
+            font-size: 17.5px;
             font-weight: 500;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
 
             @include md {
                 font-size: 24px;
@@ -83,12 +83,12 @@
 
             input {
                 width: calc(100% - 100px);
-                height: 45px;
+                height: 42px;
                 background-color: white;
                 outline: 0;
                 border: 0;
                 border-radius: 30px 0 0 30px;
-                padding: 0 12px;
+                padding: 0 15px;
                 font-size: 13px;
 
                 @include md {
@@ -100,8 +100,8 @@
             }
 
             button {
-                width: 75px;
-                height: 45px;
+                width: 80px;
+                height: 42px;
                 background: var(--gradient);
                 color: white;
                 outline: 0;
