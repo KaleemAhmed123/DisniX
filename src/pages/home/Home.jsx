@@ -7,7 +7,7 @@ import Trending from "./trending/Trending";
 const Home = () => {
   return (
     <>
-      <div style={{ height: 1000 }}>
+      <div>
         <HeroBanner />
         <Trending />
       </div>

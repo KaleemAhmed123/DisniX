@@ -7,7 +7,7 @@ const SwitchTabs = ({ data, onTabChange }) => {
   const [left, setLeft] = useState(0); //for style
 
   const activeTab = (tab, index) => {
-    setLeft(index * 100); // in style tab item has width of 100px
+    setLeft(index * 90); // in style tab item has width of 100px
     setTimeout(() => {
       // for smoothness
       setSelectedTab(index);

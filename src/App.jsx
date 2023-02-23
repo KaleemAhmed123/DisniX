@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { fetchData } from "./utils/api";
 
+import { useSelector, useDispatch } from "react-redux";
+import { getApiConfig, getGenres } from "./store/homeSlice";
+
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import Home from "./pages/home/Home";
@@ -10,27 +13,43 @@ import SearchResult from "./pages/searchResult/SearchResult";
 import Explore from "./pages/explore/Explore";
 import PageNotFound from "./pages/404/PageNotFound";
 
-import { useSelector, useDispatch } from "react-redux";
-import { getApiConfig } from "./store/homeSlice";
-
 function App() {
   const dispatch = useDispatch();
-  const url = useSelector((state) => state.home.url);
+  const { url } = useSelector((state) => state.home);
 
   useEffect(() => {
-    apiConfigEP();
+    fetchApiConfig();
+    genresCall();
   }, []);
-  // config /endpoints have what we need like poster and all...
-  const apiConfigEP = () => {
+
+  const fetchApiConfig = () => {
     fetchData("/configuration").then((res) => {
       const url = {
         backdrop: res.images.secure_base_url + "original",
         poster: res.images.secure_base_url + "original",
         profile: res.images.secure_base_url + "original",
       };
-      // store me base url save honge then just id base par ..
+
       dispatch(getApiConfig(url));
     });
+  };
+
+  const genresCall = async () => {
+    let promises = [];
+    let endPoints = ["tv", "movie"];
+    let allGenres = {};
+
+    endPoints.forEach((url) => {
+      promises.push(fetchData(`/genre/${url}/list`));
+    });
+
+    const data = await Promise.all(promises);
+    console.log(data);
+    data.map(({ genres }) => {
+      return genres.map((item) => (allGenres[item.id] = item));
+    });
+
+    dispatch(getGenres(allGenres));
   };
 
   return (
