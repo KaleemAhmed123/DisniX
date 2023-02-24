@@ -38,6 +38,7 @@ const VideosSection = ({ data, loading }) => {
               >
                 <div className="videoThumbnail">
                   <Img
+                    loading="lazy"
                     src={`https://img.youtube.com/vi/${vid.key}/mqdefault.jpg`}
                   />
                   <PlayIcon />

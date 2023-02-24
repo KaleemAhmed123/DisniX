@@ -17,6 +17,7 @@ const VideoPopup = ({ show, setShow, videoId, setVideoId }) => {
         </span>
         {/* ReactPlayer library - better than embed yt */}
         <ReactPlayer
+          origin={window.location.href}
           url={`https://www.youtube.com/watch?v=${videoId}`}
           controls
           width="100%"
