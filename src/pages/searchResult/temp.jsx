@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
-import "./style.scss";
 import { useParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
-// useFetch has config  so wont work here
+
+import "./style.scss";
+
 import { fetchData } from "../../utils/api";
 import ContentWrapper from "../../components/contentWrapper/ContentWrapper";
 import MovieCard from "../../components/movieCard/MovieCard";
 import Spinner from "../../components/spinner/Spinner";
 import noResults from "../../assets/no-results.png";
+
 const SearchResult = () => {
   const [data, setData] = useState(null);
   const [pageNum, setPageNum] = useState(1);
   const [loading, setLoading] = useState(false);
-  const { query } = useParams(); // searchQuery has this
+  const { query } = useParams();
 
-  const fetchFirstPage = () => {
+  const fetchInitialData = () => {
     setLoading(true);
     fetchData(`/search/multi?query=${query}&page=${pageNum}`).then((res) => {
       setData(res);
@@ -23,16 +25,13 @@ const SearchResult = () => {
     });
   };
 
-  useEffect(() => {
-    setPageNum(1); // 1 day debug (set 1 every time query changes)
-    fetchFirstPage();
-  }, [query]);
-  // for infinite scrolling
-  const fetchNextPage = () => {
-    // last results ko merge karna hai now page is 2 so calling api and mergin the prev+1
+  const fetchNextPageData = () => {
     fetchData(`/search/multi?query=${query}&page=${pageNum}`).then((res) => {
       if (data?.results) {
-        setData({ ...data, results: { ...data?.results, ...res.results } });
+        setData({
+          ...data,
+          results: [...data?.results, ...res.results],
+        });
       } else {
         setData(res);
       }
@@ -40,10 +39,14 @@ const SearchResult = () => {
     });
   };
 
+  useEffect(() => {
+    setPageNum(1);
+    fetchInitialData();
+  }, [query]);
+
   return (
     <div className="searchResultsPage">
       {loading && <Spinner initial={true} />}
-
       {!loading && (
         <ContentWrapper>
           {data?.results?.length > 0 ? (
@@ -56,22 +59,20 @@ const SearchResult = () => {
               <InfiniteScroll
                 className="content"
                 dataLength={data?.results?.length || []}
-                next={fetchNextPage}
+                next={fetchNextPageData}
                 hasMore={pageNum <= data?.total_pages}
                 loader={<Spinner />}
               >
-                {data?.results.map((item, i) => {
-                  // result also contains search about person so i'm not showing here maybe in future
+                {data?.results.map((item, index) => {
                   if (item.media_type === "person") return;
-                  return <MovieCard key={i} data={item} fromSearch={true} />;
+                  return (
+                    <MovieCard key={index} data={item} fromSearch={true} />
+                  );
                 })}
               </InfiniteScroll>
             </>
           ) : (
-            <div>
-              <span className="resultNotFound">Sorry, Results not found!</span>
-              <img src={noResults} style={{ width: 400, display: "flex" }} />
-            </div>
+            <span className="resultNotFound">Sorry, Results not found!</span>
           )}
         </ContentWrapper>
       )}

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import useFetch from "../../../hooks/usefetch";
+import { useSelector } from "react-redux";
 import "./style.scss";
-
+import useFetch from "../../../hooks/useFetch";
 import Img from "../../../components/lazyLoadImg/Img";
 import ContentWrapper from "../../../components/contentWrapper/ContentWrapper";
 
@@ -12,19 +11,16 @@ const HeroBanner = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   const { url } = useSelector((state) => state.home);
-
   const { data, loading } = useFetch("/movie/upcoming");
 
-  // for random banner
   useEffect(() => {
     const bgUrl =
-      url?.backdrop +
-      data?.results[Math.floor(Math.random() * 20)]?.backdrop_path;
+      url.backdrop +
+      data?.results?.[Math.floor(Math.random() * 20)]?.backdrop_path;
     setBackground(bgUrl);
   }, [data]);
 
-  // for search query
-  const searchQueryHandle = (e) => {
+  const searchQueryHandler = (e) => {
     if (e.key === "Enter" && query.length > 0) {
       navigate(`/search/${query}`);
     }
@@ -39,20 +35,18 @@ const HeroBanner = () => {
       )}
 
       <div className="opacity-layer"></div>
-
       <ContentWrapper>
         <div className="heroBannerContent">
           <span className="title">Welcome.</span>
           <span className="subTitle">
-            Millions of movies, TV shows and people to discover. Explore now.
+            Thousands of movies, TV shows and people to discover. Explore now.
           </span>
-
           <div className="searchInput">
             <input
               type="text"
-              placeholder="Search for a movie or TV show....."
-              onKeyUp={() => searchQueryHandle}
+              placeholder="Search for a movie or tv show...."
               onChange={(e) => setQuery(e.target.value)}
+              onKeyUp={searchQueryHandler}
             />
             <button>Search</button>
           </div>
