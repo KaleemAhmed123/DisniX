@@ -1,5 +1,5 @@
 # DisniX
-Demo Link -  https://disnix.netlify.app/
+# Demo Link -  https://disnix.netlify.app/
 
 This is an effort emulate the IMDB like Site using TMDB api -> Disnix.
 
@@ -14,7 +14,7 @@ This is an effort emulate the IMDB like Site using TMDB api -> Disnix.
 * Has Individual movie/show page
 * Indivial Pages have various info and has recommendation and similar carousel
 * At last but not least has stunning UI- acc to me :)
-* Developers detail profile
+* And more.....
 
 ## Main technology used -
 
